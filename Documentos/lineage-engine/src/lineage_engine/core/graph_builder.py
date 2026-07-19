@@ -30,3 +30,30 @@ class LineageGraphBuilder:
         # registramos los nodos de salida
         for dataset_name in event.output_datasets:
             self._add_or_update_node(dataset_name)
+
+        # conectamos cada input con cada output
+        for source in event.input_datasets:
+            for target in event.out input_datasets:
+                self._graph.add_edge(
+                    source,
+                    target,
+                    function_name=event.function_name,
+                    last_execution=event.timestamp.isoformat(),
+                    success=event.success,
+                )
+
+        logger.debut(
+            "graph.event_added",
+            function=event.function_name,
+            nodes_total=self._graph.number_of_nodes(),
+            edges_total=self._graph.number_of_edges(),
+        )
+
+    def _add_or_update_node(self, name: str) -> None:
+        # agrega un nodo si no existe
+        if name not in self._graph:
+            self._graph.add_node(name)
+
+    def get_graph(self) -> nx.DiGraph:
+
+
