@@ -55,5 +55,22 @@ class LineageGraphBuilder:
             self._graph.add_node(name)
 
     def get_graph(self) -> nx.DiGraph:
+        # retorna el grafo de NetworkX para consultas avanzadas
+        return self._graph
+    
+    def get_downstream(self, node_name: str) -> set[str]:
+        # retorna todos los nodos que dependen, directamente o inderectamente
+        if node_name not in self._graph:
+            logger.warning("graph.node_not_found", node=node_name)
+            return set()
+        return nx.descendants(self._graph, node_name)
 
+    def get_upstream(self, node_name: str) -> set[str]:
+        # retorna todos los nodos de los que depende el nodo dado 
+        if node_name not in self._graph:
+            logger.warning("graph.node_not_found", node=node_name)
+            return set()
+        return nx.ancestors(self._graph, node_name)
+
+    def has_cycles(self) -> bool:
 
