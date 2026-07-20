@@ -73,4 +73,26 @@ class LineageGraphBuilder:
         return nx.ancestors(self._graph, node_name)
 
     def has_cycles(self) -> bool:
+        # verifica si el grafo tiene ciclos
+        return not nx.is_directed_acyclic_graph(self._graph)
 
+    def get_node_count(self) -> int:
+        return self._graph.number_of_nodes()
+
+    def get_edge_count(self) -> int:
+        return self._graph.number_of_edges()
+    
+    def to_dict(self) -> dict[str, Any]:
+        # exporta el grafo a un diccionario serializable, util para enviarlo despues por la API REST
+        return {
+            "nodes": list(self._graph.nodes()),
+            "edges": [
+                {
+                    "source": source,
+                    "target": target,
+                    "function_name": data.get("function_name"),
+                    "success": data.get("success")
+                }
+                for source, target, data in self._graph.edges(data=True)
+            ],
+        }
