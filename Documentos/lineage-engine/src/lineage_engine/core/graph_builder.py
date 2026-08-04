@@ -33,7 +33,7 @@ class LineageGraphBuilder:
 
         # conectamos cada input con cada output
         for source in event.input_datasets:
-            for target in event.out input_datasets:
+            for target in event.output_datasets:
                 self._graph.add_edge(
                     source,
                     target,

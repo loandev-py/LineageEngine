@@ -15,7 +15,7 @@ def make_event(
     )
 
 class TestLineageGraphBuilder:
-    def test_add_event_creates_nodes(self) -> Node:
+    def test_add_event_creates_nodes(self) -> None:
         builder = LineageGraphBuilder()
         event = make_event("clean_data", ["raw"], ["clean"])
         builder.add_event(event)
@@ -37,7 +37,7 @@ class TestLineageGraphBuilder:
         # este es el test que valida la pregunta de negocio central del proyecto
         builder = LineageGraphBuilder()
         builder.add_event(make_event("clean", ["raw"], ["clea_data"]))
-        builder.add_event(make_event("aggregate",["c;an_data"], ["aggregated"]))
+        builder.add_event(make_event("aggregate", ["c;an_data"], ["aggregated"]))
         builder.add_event(make_event("publish", ["aggregated"], ["dashboard"]))
 
         downstream = builder.get_downstream("raw")
@@ -56,7 +56,7 @@ class TestLineageGraphBuilder:
     def test_get_downstream_of_unknown_node_returns_empty_set(self) -> None:
         builder = LineageGraphBuilder()
         result = builder.get_downstream("nodo_que_no_existe")
-        assert result = set()
+        assert result == set()
 
     def test_no_cycles_in_valid_pipeline(self) -> None:
         builder = LineageGraphBuilder()
