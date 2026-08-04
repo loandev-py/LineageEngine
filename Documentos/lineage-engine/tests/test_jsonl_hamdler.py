@@ -34,7 +34,7 @@ class TestJSONLHandler:
     def test_write_multiple_events_append(
         self, temp_jsonl_path: Path, sample_event: LineageEvent
     ) -> None:
-        handler + JSONLHandler(temp_jsonl_path)
+        handler = JSONLHandler(temp_jsonl_path)
         handler.write_event(sample_event)
         handler.write_event(sample_event)
         handler.write_event(sample_event)
@@ -45,7 +45,7 @@ class TestJSONLHandler:
         self, temp_jsonl_path: Path
     ) -> None:
         handler = JSONLHandler(temp_jsonl_path)
-        handler.write_event(sample_event)
+        events = list(handler.read_events())
         assert events == []
 
     def test_clear_removes_file(
@@ -56,9 +56,9 @@ class TestJSONLHandler:
         assert temp_jsonl_path.exists()
 
         handler.clear()
-        assert temp_jsonl_path.exists()
+        assert not temp_jsonl_path.exists()
 
-    def test_creates_parent_directory_if-missing( self, tmp_path: Path) -> None:
+    def test_creates_parent_directory_if_missing( self, tmp_path: Path) -> None:
         nested_path = tmp_path / "data" / "logs" / "events.jsonl"
         handler = JSONLHandler(nested_path)
         assert nested_path.parent.exists()
