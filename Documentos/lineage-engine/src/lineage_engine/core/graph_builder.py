@@ -42,7 +42,7 @@ class LineageGraphBuilder:
                     success=event.success,
                 )
 
-        logger.debut(
+        logger.debug(
             "graph.event_added",
             function=event.function_name,
             nodes_total=self._graph.number_of_nodes(),

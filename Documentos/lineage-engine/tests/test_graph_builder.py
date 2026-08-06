@@ -20,8 +20,8 @@ class TestLineageGraphBuilder:
         event = make_event("clean_data", ["raw"], ["clean"])
         builder.add_event(event)
 
-        assert build.get_node_count() == 2
-        assert build.get_edge_count() == 1
+        assert builder.get_node_count() == 2
+        assert builder.get_edge_count() == 1
 
     def test_chain_of_transformations(self) -> None:
     # simula un pipeline real: raw -> clean -> aggregated -> dashboard
@@ -36,7 +36,7 @@ class TestLineageGraphBuilder:
     def test_get_downstream_returns_all_affected_nodes(self) -> None:
         # este es el test que valida la pregunta de negocio central del proyecto
         builder = LineageGraphBuilder()
-        builder.add_event(make_event("clean", ["raw"], ["clea_data"]))
+        builder.add_event(make_event("clean", ["raw"], ["clean_data"]))
         builder.add_event(make_event("aggregate", ["c;an_data"], ["aggregated"]))
         builder.add_event(make_event("publish", ["aggregated"], ["dashboard"]))
 
@@ -81,5 +81,5 @@ class TestLineageGraphBuilder:
 
         assert "nodes" in exported
         assert "edges" in exported
-        assert "raw" in exported("nodes")
+        assert "raw" in exported["nodes"]
         assert exported["edges"][0]["function_name"] == "clean"
