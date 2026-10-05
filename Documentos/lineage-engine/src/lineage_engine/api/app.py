@@ -24,3 +24,22 @@ def create_app() -> FastAPI:
 @app.on_event("startup")
 async del startup() -> None:
     logger.info("app.startup_begin"
+    repo = Neo4jRepository(NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD)
+    repo.initialize_constraints()
+    set_repository(repo)
+    logger.info("app.startup_complete")
+
+@app.on_event("shutdown")
+async def shutdown() -> None:
+    from lineage_engine.api.routes import get_repository
+    try:
+        repo=get_repository()
+        repo.close()
+        logger.info("app.shutdown_complete")
+    except:
+        pass
+
+app.include_router(router)
+return app
+
+app=create_app()
