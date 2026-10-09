@@ -12,7 +12,7 @@ logger = structlog.get_logger(__name__)
 # aqui en la arquitactra, no en la configuracion
 NEO4J_URI = "bolt://localhost:7687"
 NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "lineage_passorwd"
+NEO4J_PASSWORD = "lineage_password"
 
 def create_app() -> FastAPI:
     app = FastAPI(
