@@ -16,6 +16,8 @@ from pydantic import BaseModel
 from lineage_engine.core.tracker import get_captured_events
 from lineage_engine.storage.neo4j_repository import Neo4jRepository
 
+from lineage_engine.models.lineage import LineageEvent
+
 logger = structlog.get_logger(__name__)
 
 # APIRouter agrupa endpoints relacionados. En proyectos grandes
@@ -182,3 +184,16 @@ def health_check() -> dict[str, str]:
         return {"status": "ok", "neo4j": "connected"}
     except Exception as exc:
         raise HTTPException(status_code=503, detail=f"Neo4j no disponible: {exc}")
+
+@router.post("/event", status_code=201)
+def register_event(event: LineageEvent) -> dict[str, str]:
+    """
+    Registra un evento de linaje directamente en Neo4j.
+
+    Este endpoint es la solución correcta al problema de memoria
+    entre procesos: el cliente serializa el evento a JSON y lo
+    envía aquí, donde el servidor lo persiste en Neo4j.
+    """
+    repo = get_repository()
+    repo.save_event(event)
+    return {"event_id": str(event.id), "status": "saved"}
