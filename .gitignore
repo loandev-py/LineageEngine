@@ -1,0 +1,36 @@
+# Entorno virtual — nunca se sube, pesa cientos de MB
+.venv/
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Pytest y coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# uv
+.uv/
+
+# Datos locales del proyecto
+data/
+*.jsonl
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Variables de entorno (credenciales — NUNCA a GitHub)
+.env
+.env.local
+
+# Logs
+*.log
+logs/
