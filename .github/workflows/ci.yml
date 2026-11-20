@@ -1,6 +1,6 @@
+New-Item -ItemType Directory -Path .github\workflows -Force
+@"
 name: CI
-
-# Cuándo se activa este pipeline
 on:
   push:
     branches: [main]
@@ -9,12 +9,7 @@ on:
 
 jobs:
   test:
-    name: Tests & Coverage
-    # GitHub nos da una máquina Ubuntu gratis
     runs-on: ubuntu-latest
-
-    # Servicios = contenedores Docker que corren junto al job
-    # Nuestros tests de API necesitan Neo4j real
     services:
       neo4j:
         image: neo4j:5.18-community
@@ -23,43 +18,27 @@ jobs:
         ports:
           - 7687:7687
           - 7474:7474
-        # Esperamos hasta que Neo4j esté listo antes de correr tests
         options: >-
           --health-cmd "cypher-shell -u neo4j -p lineage_password 'RETURN 1'"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 10
-
     steps:
-      # 1. Clonar el repositorio en la máquina de GitHub
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # 2. Instalar uv (nuestro gestor de paquetes)
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
         with:
           version: "latest"
-
-      # 3. Instalar Python 3.11
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      # 4. Instalar dependencias del proyecto
       - name: Install dependencies
         run: uv sync --all-extras
-
-      # 5. Verificar estilo de código con ruff
-      - name: Lint with ruff
+      - name: Lint
         run: uv run ruff check src/ tests/
-
-      # 6. Correr todos los tests con coverage
-      - name: Run tests
+      - name: Test
         run: uv run pytest -v --tb=short
         env:
-          # Le decimos a los tests dónde está Neo4j
           NEO4J_URI: bolt://localhost:7687
           NEO4J_USER: neo4j
           NEO4J_PASSWORD: lineage_password
+"@ | Out-File -FilePath .github\workflows\ci.yml -Encoding utf8
