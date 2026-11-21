@@ -1,7 +1,7 @@
 ﻿# Real-Time Data Lineage Engine
 
-[![CI](https://github.com/loandev-py/lineage-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/loandev-py/lineage-engine/actions)
-[![Coverage](https://img.shields.io/badge/coverage-79%25-brightgreen)](https://github.com/loandev-py/lineage-engine)
+[![CI](https://github.com/loandev-py/LineageEngine/actions/workflows/ci.yml/badge.svg)](https://github.com/loandev-py/LineageEngine/actions)
+[![Coverage](https://img.shields.io/badge/coverage-79%25-brightgreen)](https://github.com/loandev-py/LineageEngine)
 [![Python](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/)
 
 > **"Git history, but for your data."**
