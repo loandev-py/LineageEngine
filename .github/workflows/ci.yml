@@ -1,6 +1,5 @@
-New-Item -ItemType Directory -Path .github\workflows -Force
-@"
 name: CI
+
 on:
   push:
     branches: [main]
@@ -9,7 +8,9 @@ on:
 
 jobs:
   test:
+    name: Tests & Coverage
     runs-on: ubuntu-latest
+
     services:
       neo4j:
         image: neo4j:5.18-community
@@ -23,22 +24,30 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 10
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
         with:
           version: "latest"
-      - uses: actions/setup-python@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - name: Install dependencies
         run: uv sync --all-extras
-      - name: Lint
+
+      - name: Lint with ruff
         run: uv run ruff check src/ tests/
-      - name: Test
+
+      - name: Run tests
         run: uv run pytest -v --tb=short
         env:
           NEO4J_URI: bolt://localhost:7687
           NEO4J_USER: neo4j
           NEO4J_PASSWORD: lineage_password
-"@ | Out-File -FilePath .github\workflows\ci.yml -Encoding utf8
