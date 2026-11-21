@@ -1,7 +1,7 @@
 ﻿# Real-Time Data Lineage Engine
 
-[![CI](https://github.com/TU_USUARIO/lineage-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/TU_USUARIO/lineage-engine/actions)
-[![Coverage](https://img.shields.io/badge/coverage-79%25-brightgreen)](https://github.com/TU_USUARIO/lineage-engine)
+[![CI](https://github.com/loandev-py/lineage-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/loandev-py/lineage-engine/actions)
+[![Coverage](https://img.shields.io/badge/coverage-79%25-brightgreen)](https://github.com/loandev-py/lineage-engine)
 [![Python](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/)
 
 > **"Git history, but for your data."**
@@ -73,7 +73,7 @@ This engine solves that by automatically capturing the complete data graph at ru
 
 ### 1. Clone & install
 ```bash
-git clone https://github.com/TU_USUARIO/lineage-engine.git
+git clone https://github.com/loandev-py/lineage-engine.git
 cd lineage-engine
 uv sync
 ```
