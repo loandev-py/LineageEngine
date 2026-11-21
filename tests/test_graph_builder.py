@@ -1,6 +1,5 @@
 """Tests del LineageGraphBuilder."""
 
-import pytest
 
 from lineage_engine.core.graph_builder import LineageGraphBuilder
 from lineage_engine.models.lineage import EventType, LineageEvent

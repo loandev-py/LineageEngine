@@ -8,22 +8,22 @@ Modelos de datos del Motor de Linaje.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Any
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, field_validator
 
 
-class NodeType(str, Enum):
+class NodeType(StrEnum):
     DATASET = "dataset"
     TRANSFORMATION = "transformation"
     SOURCE = "source"
     SINK = "sink"
 
 
-class EventType(str, Enum):
+class EventType(StrEnum):
     READ = "read"
     WRITE = "write"
     TRANSFORM = "transform"
@@ -36,7 +36,7 @@ class LineageNode(BaseModel):
     id: UUID = Field(default_factory=uuid4)
     name: str = Field(min_length=1, max_length=255)
     node_type: NodeType
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     metadata: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("name")
@@ -57,7 +57,7 @@ class LineageEdge(BaseModel):
     source_id: UUID
     target_id: UUID
     transformation_name: str
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     metadata: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("transformation_name")
@@ -79,7 +79,7 @@ class LineageEvent(BaseModel):
     execution_time_ms: float = Field(ge=0)
     success: bool = True
     error_message: str | None = None
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
     metadata: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("error_message")
@@ -93,5 +93,5 @@ class LineageEvent(BaseModel):
         return v
 
     def to_jsonl_line(self) -> str:
-        """JSONL: cada línea es un JSON independiente, ideal para hacer append a un log."""
+        """JSONL: cada línea es un JSON independiente, ideal para append."""
         return self.model_dump_json() + "\n"

@@ -11,8 +11,9 @@ de negocio) de "cómo se almacenan esos datos" (detalles de Neo4j).
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Any, Iterator
+from typing import Any
 
 import structlog
 from neo4j import GraphDatabase, Session

@@ -1,9 +1,10 @@
-from pathlib import Path 
+from pathlib import Path
 
 import pytest
 
 from lineage_engine.models.lineage import EventType, LineageEvent
 from lineage_engine.storage.jsonl_handler import JSONLHandler
+
 
 @pytest.fixture
 def temp_jsonl_path(tmp_path: Path) -> Path:
@@ -60,7 +61,7 @@ class TestJSONLHandler:
 
     def test_creates_parent_directory_if_missing( self, tmp_path: Path) -> None:
         nested_path = tmp_path / "data" / "logs" / "events.jsonl"
-        handler = JSONLHandler(nested_path)
+        JSONLHandler(nested_path)
         assert nested_path.parent.exists()
 
 

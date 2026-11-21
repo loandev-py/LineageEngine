@@ -14,9 +14,8 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from lineage_engine.core.tracker import get_captured_events
-from lineage_engine.storage.neo4j_repository import Neo4jRepository
-
 from lineage_engine.models.lineage import LineageEvent
+from lineage_engine.storage.neo4j_repository import Neo4jRepository
 
 logger = structlog.get_logger(__name__)
 
@@ -29,8 +28,10 @@ router = APIRouter(prefix="/lineage", tags=["lineage"])
 # Pydantic define exactamente qué espera y qué retorna cada endpoint.
 # FastAPI los usa para validar entradas y generar la documentación.
 
+
 class TrackEventRequest(BaseModel):
     """Cuerpo del request para registrar un evento manualmente."""
+
     function_name: str
     input_datasets: list[str]
     output_datasets: list[str]
@@ -40,6 +41,7 @@ class TrackEventRequest(BaseModel):
 
 class ImpactResponse(BaseModel):
     """Respuesta del análisis de impacto."""
+
     node: str
     downstream: list[str]
     upstream: list[str]
@@ -48,6 +50,7 @@ class ImpactResponse(BaseModel):
 
 class GraphResponse(BaseModel):
     """Representación completa del grafo de linaje."""
+
     nodes: list[dict[str, Any]]
     edges: list[dict[str, Any]]
     total_nodes: int
@@ -78,6 +81,7 @@ def set_repository(repo: Neo4jRepository) -> None:
 
 
 # ─── Endpoints ───────────────────────────────────────────────────────────────
+
 
 @router.get("/graph", response_model=GraphResponse)
 def get_graph() -> GraphResponse:
@@ -152,12 +156,16 @@ def sync_events_to_neo4j() -> dict[str, Any]:
             repo.save_event(event)
             synced += 1
         except Exception as exc:
-            logger.error("api.sync_event_failed", event_id=str(event.id), error=str(exc))
+            logger.error(
+                "api.sync_event_failed",
+                event_id=str(event.id),
+                error=str(exc),
+            )
             errors += 1
 
     logger.info("api.sync_completed", synced=synced, errors=errors)
     return {
-        "message": f"Sincronización completada.",
+        "message": "Sincronización completada.",
         "synced": synced,
         "errors": errors,
     }
@@ -184,6 +192,7 @@ def health_check() -> dict[str, str]:
         return {"status": "ok", "neo4j": "connected"}
     except Exception as exc:
         raise HTTPException(status_code=503, detail=f"Neo4j no disponible: {exc}")
+
 
 @router.post("/event", status_code=201)
 def register_event(event: LineageEvent) -> dict[str, str]:

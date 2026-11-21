@@ -111,7 +111,7 @@ class TestGraphEndpoint:
         response = client.get("/lineage/graph")
         assert response.status_code == 200
         data = response.json()
-        assert data["total_nodes"] == 4   # source_db, raw_orders, clean_orders, dashboard
+        assert data["total_nodes"] == 4  # 4 nodes: source, raw, clean, dashboard
         assert data["total_edges"] == 3
 
 
